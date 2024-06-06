@@ -1,4 +1,4 @@
-package com.laiscarvalho.orderparser.domain;
+package com.laiscarvalho.orderparser.domain.model;
 
 import java.math.BigDecimal;
 import lombok.Builder;
