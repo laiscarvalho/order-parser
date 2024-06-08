@@ -8,6 +8,8 @@ import static com.laiscarvalho.orderparser.usecase.OrderEnum.PRODUCT_ID;
 import static com.laiscarvalho.orderparser.usecase.OrderEnum.PRODUCT_VALUE;
 import static com.laiscarvalho.orderparser.usecase.OrderEnum.USER_ID;
 import com.laiscarvalho.orderparser.domain.dto.OrderDto;
+import com.laiscarvalho.orderparser.domain.mapper.OrderMapper;
+import com.laiscarvalho.orderparser.infrastructure.db.OrderImp;
 import com.laiscarvalho.orderparser.usecase.port.OrderPort;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,11 +31,15 @@ public class OrderUseCase implements OrderPort {
   private static final String REMOVE_ZERO = "0";
   private static final Integer DEFAULT_ID_ZERO = 0;
 
+  private final OrderImp orderImp;
+
   @Override
   public void executeImporter(InputStream file) {
     try (BufferedReader fileBuffered = new BufferedReader(new InputStreamReader(file))) {
       fileBuffered.lines().forEach(line -> {
         var orderDto = formatterLine(line);
+        var order = OrderMapper.dtoToDomain(orderDto);
+        orderImp.updateOrSaveOrder(order);
       });
     } catch (IOException e) {
       log.error("[execute] Error reading file", e);
