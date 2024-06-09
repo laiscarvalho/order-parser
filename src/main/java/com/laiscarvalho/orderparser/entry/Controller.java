@@ -1,5 +1,7 @@
 package com.laiscarvalho.orderparser.entry;
 
+import com.laiscarvalho.orderparser.exception.ProcessingErrorType;
+import com.laiscarvalho.orderparser.exception.ProcessingException;
 import com.laiscarvalho.orderparser.usecase.port.OrderPort;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +25,21 @@ public class Controller {
   public void importFile(@RequestParam("file") MultipartFile multipartFile) {
     try {
       log.info("[import-file-controller] file received: {}", multipartFile);
+      validateFile(multipartFile);
       orderPort.executeImporter(multipartFile.getInputStream());
     } catch (IOException e) {
       log.error("[import-file-controller] error to process file: {}", multipartFile, e);
     } catch (Exception e) {
       log.error("[import-file-controller] invalid input file: {}", multipartFile, e);
+    }
+  }
+
+  private void validateFile(MultipartFile multipartFile) throws ProcessingException {
+    String contentType = multipartFile.getContentType();
+    String fileName = multipartFile.getOriginalFilename();
+    if (!contentType.equals("text/plain") ||
+        (!fileName.endsWith(".txt"))) {
+      throw new ProcessingException(ProcessingErrorType.INVALID_INPUT_FILE);
     }
   }
 }
