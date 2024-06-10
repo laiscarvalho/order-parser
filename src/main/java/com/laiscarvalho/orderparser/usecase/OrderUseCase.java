@@ -9,6 +9,8 @@ import static com.laiscarvalho.orderparser.usecase.OrderEnum.PRODUCT_VALUE;
 import static com.laiscarvalho.orderparser.usecase.OrderEnum.USER_ID;
 import com.laiscarvalho.orderparser.domain.dto.OrderDto;
 import com.laiscarvalho.orderparser.domain.mapper.OrderMapper;
+import com.laiscarvalho.orderparser.exception.ProcessingErrorType;
+import com.laiscarvalho.orderparser.exception.ProcessingException;
 import com.laiscarvalho.orderparser.infrastructure.db.OrderImp;
 import com.laiscarvalho.orderparser.usecase.port.OrderPort;
 import java.io.BufferedReader;
@@ -50,6 +52,7 @@ public class OrderUseCase implements OrderPort {
 
     if (!LINE_SIZE.getSize().equals(line.length())) {
       log.error("[formatterLine] Invalid line size: {} ", line.length());
+      throw new ProcessingException(ProcessingErrorType.FILE_INVALID_LINE);
     }
     var userId = getDataLine(line, USER_ID);
     var name = getDataLine(line, NAME);
