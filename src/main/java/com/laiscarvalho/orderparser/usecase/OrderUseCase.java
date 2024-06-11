@@ -7,8 +7,11 @@ import static com.laiscarvalho.orderparser.usecase.OrderEnum.ORDER_ID;
 import static com.laiscarvalho.orderparser.usecase.OrderEnum.PRODUCT_ID;
 import static com.laiscarvalho.orderparser.usecase.OrderEnum.PRODUCT_VALUE;
 import static com.laiscarvalho.orderparser.usecase.OrderEnum.USER_ID;
+import static java.util.Objects.isNull;
 import com.laiscarvalho.orderparser.domain.dto.OrderDto;
 import com.laiscarvalho.orderparser.domain.mapper.OrderMapper;
+import com.laiscarvalho.orderparser.domain.model.Order;
+import com.laiscarvalho.orderparser.entry.dto.OrderResponseDto;
 import com.laiscarvalho.orderparser.exception.ProcessingErrorType;
 import com.laiscarvalho.orderparser.exception.ProcessingException;
 import com.laiscarvalho.orderparser.infrastructure.db.OrderImp;
@@ -20,6 +23,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -76,5 +80,15 @@ public class OrderUseCase implements OrderPort {
             rule.getInitialDataPosition(),
             rule.getInitialDataPosition() + rule.getSize()),
         REMOVE_ZERO).trim();
+  }
+
+  @Override
+  public List<OrderResponseDto> executeGetOrders() {
+    List<Order> orders = orderImp.getAllOrders();
+    if (isNull(orders)) {
+      log.error("[find-all-orders] orders not found");
+      throw new ProcessingException(ProcessingErrorType.ORDERS_NOT_FOUND);
+    }
+    return OrderMapper.domainToResponseDto(orders);
   }
 }

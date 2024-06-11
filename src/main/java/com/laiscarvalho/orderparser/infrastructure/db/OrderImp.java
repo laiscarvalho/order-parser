@@ -8,6 +8,8 @@ import com.laiscarvalho.orderparser.infrastructure.db.repository.OrderRepository
 import com.laiscarvalho.orderparser.infrastructure.db.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -50,6 +52,12 @@ public class OrderImp {
       userRepository.save(user);
     }
     return orderEntity;
+  }
+
+  public List<Order> getAllOrders() {
+    return orderRepository.findAll().stream()
+        .map(OrderEntityMapper::entityToDomain)
+        .toList();
   }
 
 }
