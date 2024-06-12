@@ -45,15 +45,6 @@ public class Controller {
     }
   }
 
-  private void validateFile(MultipartFile multipartFile) throws ProcessingException {
-    String contentType = multipartFile.getContentType();
-    String fileName = multipartFile.getOriginalFilename();
-    if (!contentType.equals("text/plain") ||
-        (!fileName.endsWith(".txt"))) {
-      throw new ProcessingException(ProcessingErrorType.INVALID_INPUT_FILE);
-    }
-  }
-
   @GetMapping("/orders")
   @Operation(summary = "Busca todos os pedidos", method = "GET")
   public List<OrderResponseDto> getAllOrders() throws ProcessingException {
@@ -74,5 +65,14 @@ public class Controller {
       throw new ProcessingException(ProcessingErrorType.ORDERS_NOT_FOUND);
     }
     return orders;
+  }
+
+  private void validateFile(MultipartFile multipartFile) throws ProcessingException {
+    String contentType = multipartFile.getContentType();
+    String fileName = multipartFile.getOriginalFilename();
+    if (!contentType.equals("text/plain") ||
+        (!fileName.endsWith(".txt"))) {
+      throw new ProcessingException(ProcessingErrorType.INVALID_INPUT_FILE);
+    }
   }
 }

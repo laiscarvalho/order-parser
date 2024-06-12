@@ -55,6 +55,27 @@ public class OrderUseCase implements OrderPort {
     }
   }
 
+  @Override
+  public List<OrderResponseDto> executeGetOrders() {
+    List<Order> orders = orderImp.getAllOrders();
+    if (isNull(orders)) {
+      log.error("[find-all-orders] orders not found");
+      throw new ProcessingException(ProcessingErrorType.ORDERS_NOT_FOUND);
+    }
+    return OrderMapper.domainToResponseDto(orders);
+  }
+
+  @Override
+  public List<OrderResponseDto> executeGetOrdersByUserId(Long userExternalId) {
+    User user = userImp.findUserById(userExternalId);
+    if (isNull(user)) {
+      log.error("[find-order-by-userId] user not found: {} ", userExternalId);
+      throw new ProcessingException(ProcessingErrorType.USER_ORDER_NOT_FOUND);
+    }
+    List<Order> order = orderImp.getOrderByUserId(user);
+    return OrderMapper.domainToResponseDto(order);
+  }
+
   public OrderDto formatterLine(String line) {
 
     if (!LINE_SIZE.getSize().equals(line.length())) {
@@ -83,26 +104,5 @@ public class OrderUseCase implements OrderPort {
             rule.getInitialDataPosition(),
             rule.getInitialDataPosition() + rule.getSize()),
         REMOVE_ZERO).trim();
-  }
-
-  @Override
-  public List<OrderResponseDto> executeGetOrders() {
-    List<Order> orders = orderImp.getAllOrders();
-    if (isNull(orders)) {
-      log.error("[find-all-orders] orders not found");
-      throw new ProcessingException(ProcessingErrorType.ORDERS_NOT_FOUND);
-    }
-    return OrderMapper.domainToResponseDto(orders);
-  }
-
-  @Override
-  public List<OrderResponseDto> executeGetOrdersByUserId(Long userExternalId) {
-    User user = userImp.findUserById(userExternalId);
-    if (isNull(user)) {
-      log.error("[find-order-by-userId] user not found: {} ", userExternalId);
-      throw new ProcessingException(ProcessingErrorType.USER_ORDER_NOT_FOUND);
-    }
-    List<Order> order = orderImp.getOrderByUserId(user);
-    return OrderMapper.domainToResponseDto(order);
   }
 }
