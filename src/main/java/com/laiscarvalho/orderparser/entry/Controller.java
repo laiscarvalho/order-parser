@@ -4,6 +4,8 @@ import com.laiscarvalho.orderparser.entry.dto.OrderResponseDto;
 import com.laiscarvalho.orderparser.exception.ProcessingErrorType;
 import com.laiscarvalho.orderparser.exception.ProcessingException;
 import com.laiscarvalho.orderparser.usecase.port.OrderPort;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -21,12 +23,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "/v1/orders")
 @RequestMapping(value = "/v1", produces = {"application/json"})
 public class Controller {
 
   private final OrderPort orderPort;
 
   @PostMapping(value = "/orders/importer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @Operation(summary = "Realiza o upload de arquivos", method = "POST")
   public void importFile(@Valid @RequestParam("file") MultipartFile multipartFile) throws ProcessingException {
     try {
       log.info("[import-file-controller] file received: {}", multipartFile);
@@ -51,6 +55,7 @@ public class Controller {
   }
 
   @GetMapping("/orders")
+  @Operation(summary = "Busca todos os pedidos", method = "GET")
   public List<OrderResponseDto> getAllOrders() throws ProcessingException {
     List<OrderResponseDto> orders = orderPort.executeGetOrders();
     if (orders.isEmpty()) {
@@ -61,6 +66,7 @@ public class Controller {
   }
 
   @GetMapping("/orders/user/{userId}")
+  @Operation(summary = "Busca todos os pedidos por usuario", method = "GET")
   public List<OrderResponseDto> getAllOrdersByUserId(@Valid @PathVariable Long userId) throws ProcessingException {
     List<OrderResponseDto> orders = orderPort.executeGetOrdersByUserId(userId);
     if (orders.isEmpty()) {
