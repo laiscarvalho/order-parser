@@ -11,10 +11,12 @@ import static java.util.Objects.isNull;
 import com.laiscarvalho.orderparser.domain.dto.OrderDto;
 import com.laiscarvalho.orderparser.domain.mapper.OrderMapper;
 import com.laiscarvalho.orderparser.domain.model.Order;
+import com.laiscarvalho.orderparser.domain.model.User;
 import com.laiscarvalho.orderparser.entry.dto.OrderResponseDto;
 import com.laiscarvalho.orderparser.exception.ProcessingErrorType;
 import com.laiscarvalho.orderparser.exception.ProcessingException;
 import com.laiscarvalho.orderparser.infrastructure.db.OrderImp;
+import com.laiscarvalho.orderparser.infrastructure.db.UserImp;
 import com.laiscarvalho.orderparser.usecase.port.OrderPort;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class OrderUseCase implements OrderPort {
   private static final Integer DEFAULT_ID_ZERO = 0;
 
   private final OrderImp orderImp;
+  private final UserImp userImp;
 
   @Override
   public void executeImporter(InputStream file) {
@@ -90,5 +93,16 @@ public class OrderUseCase implements OrderPort {
       throw new ProcessingException(ProcessingErrorType.ORDERS_NOT_FOUND);
     }
     return OrderMapper.domainToResponseDto(orders);
+  }
+
+  @Override
+  public List<OrderResponseDto> executeGetOrdersByUserId(Long userExternalId) {
+    User user = userImp.findUserById(userExternalId);
+    if (isNull(user)) {
+      log.error("[find-order-by-userId] user not found: {} ", userExternalId);
+      throw new ProcessingException(ProcessingErrorType.USER_ORDER_NOT_FOUND);
+    }
+    List<Order> order = orderImp.getOrderByUserId(user);
+    return OrderMapper.domainToResponseDto(order);
   }
 }

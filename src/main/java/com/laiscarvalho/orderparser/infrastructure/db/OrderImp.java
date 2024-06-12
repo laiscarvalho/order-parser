@@ -1,6 +1,7 @@
 package com.laiscarvalho.orderparser.infrastructure.db;
 
 import com.laiscarvalho.orderparser.domain.model.Order;
+import com.laiscarvalho.orderparser.domain.model.User;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.OrderEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.UserEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.mapper.OrderEntityMapper;
@@ -9,7 +10,6 @@ import com.laiscarvalho.orderparser.infrastructure.db.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -56,6 +56,12 @@ public class OrderImp {
 
   public List<Order> getAllOrders() {
     return orderRepository.findAll().stream()
+        .map(OrderEntityMapper::entityToDomain)
+        .toList();
+  }
+
+  public List<Order> getOrderByUserId(User user) {
+    return orderRepository.findByUserId(user.getId()).stream()
         .map(OrderEntityMapper::entityToDomain)
         .toList();
   }

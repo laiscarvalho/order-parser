@@ -4,12 +4,14 @@ import com.laiscarvalho.orderparser.entry.dto.OrderResponseDto;
 import com.laiscarvalho.orderparser.exception.ProcessingErrorType;
 import com.laiscarvalho.orderparser.exception.ProcessingException;
 import com.laiscarvalho.orderparser.usecase.port.OrderPort;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +27,7 @@ public class Controller {
   private final OrderPort orderPort;
 
   @PostMapping(value = "/orders/importer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public void importFile(@RequestParam("file") MultipartFile multipartFile) throws ProcessingException {
+  public void importFile(@Valid @RequestParam("file") MultipartFile multipartFile) throws ProcessingException {
     try {
       log.info("[import-file-controller] file received: {}", multipartFile);
       validateFile(multipartFile);
@@ -53,6 +55,16 @@ public class Controller {
     List<OrderResponseDto> orders = orderPort.executeGetOrders();
     if (orders.isEmpty()) {
       log.error("[get-all-orders-controller] get all orders ");
+      throw new ProcessingException(ProcessingErrorType.ORDERS_NOT_FOUND);
+    }
+    return orders;
+  }
+
+  @GetMapping("/orders/user/{userId}")
+  public List<OrderResponseDto> getAllOrdersByUserId(@Valid @PathVariable Long userId) throws ProcessingException {
+    List<OrderResponseDto> orders = orderPort.executeGetOrdersByUserId(userId);
+    if (orders.isEmpty()) {
+      log.error("[get-all-orders-controller] get orders by userId ");
       throw new ProcessingException(ProcessingErrorType.ORDERS_NOT_FOUND);
     }
     return orders;

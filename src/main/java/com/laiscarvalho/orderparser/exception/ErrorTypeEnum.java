@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public enum ErrorTypeEnum {
   INVALID_LINE,
   INVALID_FILE,
-  ORDER_NOT_FOUND
+  ORDER_NOT_FOUND,
+  USER_NOT_FOUND
 
 }

@@ -27,6 +27,13 @@ public class GlobalExceptionHandler extends Throwable {
           ex.getMessage()
       );
       return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    } else if (ex.getProcessingErrorType() == ProcessingErrorType.USER_ORDER_NOT_FOUND) {
+      var response = new ExceptionResponseDto(
+          HttpStatus.NOT_FOUND.value(),
+          HttpStatus.NOT_FOUND.name(),
+          ex.getMessage()
+      );
+      return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
     var response = new ExceptionResponseDto(
         HttpStatus.INTERNAL_SERVER_ERROR.value(),

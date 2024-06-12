@@ -8,4 +8,6 @@ public interface OrderPort {
   void executeImporter(InputStream file);
 
   List<OrderResponseDto> executeGetOrders();
+
+  List<OrderResponseDto> executeGetOrdersByUserId(Long userId);
 }
