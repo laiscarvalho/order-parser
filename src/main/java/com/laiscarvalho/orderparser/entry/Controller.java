@@ -25,15 +25,17 @@ public class Controller {
   private final OrderPort orderPort;
 
   @PostMapping(value = "/orders/importer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public void importFile(@RequestParam("file") MultipartFile multipartFile) {
+  public void importFile(@RequestParam("file") MultipartFile multipartFile) throws ProcessingException {
     try {
       log.info("[import-file-controller] file received: {}", multipartFile);
       validateFile(multipartFile);
       orderPort.executeImporter(multipartFile.getInputStream());
     } catch (IOException e) {
       log.error("[import-file-controller] error to process file: {}", multipartFile, e);
+      throw new ProcessingException(ProcessingErrorType.INVALID_INPUT_FILE);
     } catch (Exception e) {
       log.error("[import-file-controller] invalid input file: {}", multipartFile, e);
+      throw new ProcessingException(ProcessingErrorType.INVALID_INPUT_FILE);
     }
   }
 
