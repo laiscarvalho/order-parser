@@ -8,7 +8,10 @@ import com.laiscarvalho.orderparser.entry.dto.OrderResponseDto;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderMapper {
 
   public static Order dtoToDomain(OrderDto order) {

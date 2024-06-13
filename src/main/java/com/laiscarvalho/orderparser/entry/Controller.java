@@ -1,5 +1,6 @@
 package com.laiscarvalho.orderparser.entry;
 
+import static java.util.Objects.isNull;
 import com.laiscarvalho.orderparser.entry.dto.OrderResponseDto;
 import com.laiscarvalho.orderparser.exception.ProcessingErrorType;
 import com.laiscarvalho.orderparser.exception.ProcessingException;
@@ -70,8 +71,8 @@ public class Controller {
   private void validateFile(MultipartFile multipartFile) throws ProcessingException {
     String contentType = multipartFile.getContentType();
     String fileName = multipartFile.getOriginalFilename();
-    if (!contentType.equals("text/plain") ||
-        (!fileName.endsWith(".txt"))) {
+    if (isNull(contentType) || !contentType.equals("text/plain") ||
+        (isNull(fileName) || !fileName.endsWith(".txt"))) {
       throw new ProcessingException(ProcessingErrorType.INVALID_INPUT_FILE);
     }
   }

@@ -6,7 +6,10 @@ import com.laiscarvalho.orderparser.domain.model.User;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.OrderEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.ProductEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.UserEntity;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderEntityMapper {
   public static Order entityToDomain(OrderEntity orderEntity) {
     var products = orderEntity.getProductEntities().stream()

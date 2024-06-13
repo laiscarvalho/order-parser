@@ -2,7 +2,10 @@ package com.laiscarvalho.orderparser.infrastructure.db.mapper;
 
 import com.laiscarvalho.orderparser.domain.model.User;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.UserEntity;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserEntityMapper {
 
   public static User toDomain(UserEntity userEntity) {

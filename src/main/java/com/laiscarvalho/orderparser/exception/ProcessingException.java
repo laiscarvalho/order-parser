@@ -12,10 +12,4 @@ public class ProcessingException extends RuntimeException {
     super(processingErrorType.message());
     this.processingErrorType = processingErrorType;
   }
-
-  public ProcessingException(final ProcessingErrorType processingErrorType, final Throwable exception) {
-    super(processingErrorType.message() + " error: " + exception.getMessage());
-    this.processingErrorType = processingErrorType;
-    this.exception = exception;
-  }
 }
