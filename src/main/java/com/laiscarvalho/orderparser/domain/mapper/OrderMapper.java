@@ -36,7 +36,7 @@ public class OrderMapper {
 
     return ordersByUser.entrySet().stream().map(entry ->
         OrderResponseDto.builder()
-            .userId(entry.getKey().getId())
+            .userId(entry.getKey().getExternalId())
             .name(entry.getKey().getName())
             .orders(orderDomainToResponseDto(entry.getValue()))
             .build()
