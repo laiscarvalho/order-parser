@@ -2,13 +2,10 @@ package com.laiscarvalho.orderparser.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import com.laiscarvalho.orderparser.domain.model.User;
 import com.laiscarvalho.orderparser.infrastructure.db.UserImp;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.UserEntity;
-import com.laiscarvalho.orderparser.infrastructure.db.mapper.UserEntityMapper;
 import com.laiscarvalho.orderparser.infrastructure.db.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -33,7 +30,6 @@ public class UserImpTest {
 
     var response = userImp.findUserById(123L);
     assertThat(response).usingRecursiveComparison().isEqualTo(buildUser());
-
   }
 
   @Test

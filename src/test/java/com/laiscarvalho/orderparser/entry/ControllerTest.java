@@ -95,6 +95,52 @@ class ControllerTest {
   }
 
   @Test
+  void shouldReceiveInvalidContentTypeFile() throws Exception {
+    MockMultipartFile multipartFile = new MockMultipartFile(
+        "file",
+        "test.pdf",
+        "text/pla ",
+        "Test content".getBytes()
+    );
+
+    MvcResult result = mockMvc.perform(multipart("/v1/orders/importer")
+            .file(multipartFile))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+    Exception getException = result.getResolvedException();
+
+    assertThat(getException)
+        .isInstanceOf(ProcessingException.class)
+        .hasMessageContaining("invalid input file");
+
+    verify(orderPort, times(0)).executeImporter(any(InputStream.class));
+  }
+
+  @Test
+  void shouldReceiveNullContentTypeFile() throws Exception {
+    MockMultipartFile multipartFile = new MockMultipartFile(
+        "file",
+        "test.pdf",
+        "",
+        "Test content".getBytes()
+    );
+
+    MvcResult result = mockMvc.perform(multipart("/v1/orders/importer")
+            .file(multipartFile))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+    Exception getException = result.getResolvedException();
+
+    assertThat(getException)
+        .isInstanceOf(ProcessingException.class)
+        .hasMessageContaining("invalid input file");
+
+    verify(orderPort, times(0)).executeImporter(any(InputStream.class));
+  }
+
+
+
+  @Test
   void shouldReturnResponseException() throws Exception {
     MvcResult result = mockMvc.perform(get("/v1/orders"))
         .andExpect(status().isNotFound())
