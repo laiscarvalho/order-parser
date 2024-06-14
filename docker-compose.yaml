@@ -1,6 +1,26 @@
-version: "3.8"
 services:
   sonar:
     image: sonarqube:9.4.0-community
     ports:
       - "9000:9000"
+  mysql:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - "3310:3306"
+    environment:
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=dbparser
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: on-failure
+    environment:
+      - MYSQL_URL=jdbc:mysql://mysql:3306/dbparser?allowPublicKeyRetrieval=true&useSSL=false
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
