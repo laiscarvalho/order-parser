@@ -43,11 +43,11 @@
       <td>jdbc:mysql://localhost:3306/dbparser?allowPublicKeyRetrieval=true&useSSL=false</td> 
     </tr>
     <tr>
-      <td>USERNAME</td>
+      <td>MYSQL_USERNAME</td>
       <td>admin</td> 
     </tr>
     <tr>
-      <td>PASSWORD</td>
+      <td>MYSQL_PASSWORD</td>
       <td>admin</td> 
     </tr>
   </tbody>
