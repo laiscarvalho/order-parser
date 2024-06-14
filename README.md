@@ -9,11 +9,13 @@
 
 # Sumário
 
-- [Requisitos](#Requisitos) 
-- [Configuração de Ambiente](#Configuração-de-Ambiente)
-- [Testes](#Testes)
-- [Variaveis de ambiente](#Variaveis de ambiente)
-- [Sonar](#Sonar)
+- [Requisitos](#requisitos) 
+- [Variaveis de ambiente](#variaveis-de-ambiente)
+- [Executar app](#executar-aplicação-via-docker)
+- [Testes](#testes)
+- [Sonar](#sonar)
+- [Swagger](#swagger)
+- [Coverage](#coverage)
 
 
 # Requisitos
@@ -28,12 +30,28 @@
 
 ---
 # Variaveis de ambiente
-
-MYSQL_URL: jdbc:mysql://localhost:3306/dbparser?allowPublicKeyRetrieval=true&useSSL=false
-
-USERNAME:admin
-
-PASSWORD:admin
+<table>
+  <thead>
+    <tr>
+      <th>Env</th>
+      <th>Valor padrão</th> 
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MYSQL_URL</td>
+      <td>jdbc:mysql://localhost:3306/dbparser?allowPublicKeyRetrieval=true&useSSL=false</td> 
+    </tr>
+    <tr>
+      <td>USERNAME</td>
+      <td>admin</td> 
+    </tr>
+    <tr>
+      <td>PASSWORD</td>
+      <td>admin</td> 
+    </tr>
+  </tbody>
+</table> 
 
 ---
 # Executar aplicação via Docker
@@ -49,7 +67,7 @@ docker compose up app
 ```
 
 ---
-# Executar Testes
+# Testes
 ```
 ./mvnw test
 ```
@@ -61,7 +79,7 @@ docker compose up app
 ```
 docker compose up sonar
 
-mvn sonar:sonar -Dsonar.projectKey=order-parser -Dsonar.projectName=order-parser -Dsonar.login=admin -Dsonar.password=admin123 -Dsonar.exclusions='**/target/**,**/src/main/resources/**,**/src/test/java/**,**/*Config.*,**/*Entity.*,**/entities/**,**/*Mapper.*,**/dto/**,**/model/**,**Application.*' -Dsonar.sourceEncoding=UTF-8 -Dsonar.java.binaries=target 
+mvn sonar:sonar -Dsonar.projectKey=order-parser -Dsonar.projectName=order-parser -Dsonar.login=admin -Dsonar.password=admin -Dsonar.exclusions='**/target/**,**/src/main/resources/**,**/src/test/java/**,**/*Config.*,**/*Entity.*,**/entities/**,**/*Mapper.*,**/dto/**,**/model/**,**Application.*' -Dsonar.sourceEncoding=UTF-8 -Dsonar.java.binaries=target 
 ```
 
 ---
@@ -71,7 +89,7 @@ http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
-# Gerar coverage
+# Coverage
 ```
 ./mvnw package
 
