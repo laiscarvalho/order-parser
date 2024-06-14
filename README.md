@@ -4,7 +4,7 @@
 </p>
 <h1 align="center">Order parser</h1>
 <p align="center">
- <b>Backend para resolucao do desafio por Laís Soares de Carvalho</b></br>
+ <b>Backend para resolução do desafio por Laís Soares de Carvalho</b></br>
 </p>
 
 # Sumário
@@ -24,6 +24,8 @@
 
 [Docker-Compose 2.27.0](https://docs.docker.com/compose/release-notes/#2270)
 
+[Mysql 5.7](https://dev.mysql.com/downloads/windows/installer/5.7.html)
+
 ---
 # Variaveis de ambiente
 
@@ -34,8 +36,31 @@ USERNAME:admin
 PASSWORD:admin
 
 ---
+# Executar aplicação via Docker
+
+```
+neste modo antes é necessario configurar as envs do ambiente
+docker build . -t order-parser
+docker run -p 8080:8080 order-parser
+```
+# Executar aplicação via Docker compose
+```
+docker compose up app
+```
+
+---
+# Executar Testes
+```
+./mvnw test
+```
+
+
+---
+
 # Sonar
 ```
+docker compose up sonar
+
 mvn sonar:sonar -Dsonar.projectKey=order-parser -Dsonar.projectName=order-parser -Dsonar.login=admin -Dsonar.password=admin123 -Dsonar.exclusions='**/target/**,**/src/main/resources/**,**/src/test/java/**,**/*Config.*,**/*Entity.*,**/entities/**,**/*Mapper.*,**/dto/**,**/model/**,**Application.*' -Dsonar.sourceEncoding=UTF-8 -Dsonar.java.binaries=target 
 ```
 
@@ -43,4 +68,12 @@ mvn sonar:sonar -Dsonar.projectKey=order-parser -Dsonar.projectName=order-parser
 # Swagger
 ```
 http://localhost:8080/swagger-ui/index.html
+```
+
+---
+# Gerar coverage
+```
+./mvnw package
+
+./target/site/jacoco/index.html
 ```
