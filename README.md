@@ -11,7 +11,7 @@
 
 - [Requisitos](#requisitos) 
 - [Variaveis de ambiente](#variaveis-de-ambiente)
-- [Executar app](#executar-aplicação-via-docker)
+- [Executar app](#executar-aplicação-via-docker) 
 - [Testes](#testes)
 - [Sonar](#sonar)
 - [Swagger](#swagger)
@@ -65,6 +65,13 @@ docker run -p 8080:8080 order-parser
 ```
 docker compose up app
 ```
+
+# Executar aplicação via Jar
+```
+./mvnw package
+java -jar ./target/orderparser-0.0.1.jar
+```
+
 
 ---
 # Testes
