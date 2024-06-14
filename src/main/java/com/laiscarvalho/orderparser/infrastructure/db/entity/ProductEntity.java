@@ -4,8 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
@@ -19,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "orderEntity")
+@EqualsAndHashCode
 @Table(name = "`product`")
 public class ProductEntity {
   @Id
@@ -27,10 +25,6 @@ public class ProductEntity {
   private Long id;
 
   private Long externalId;
-
-  @ManyToOne
-  @JoinColumn(name = "orderId")
-  private OrderEntity orderEntity;
 
   private BigDecimal value;
 }

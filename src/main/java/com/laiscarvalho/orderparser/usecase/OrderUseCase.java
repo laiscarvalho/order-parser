@@ -25,7 +25,9 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -45,11 +47,8 @@ public class OrderUseCase implements OrderPort {
   @Override
   public void executeImporter(InputStream file) {
     try (BufferedReader fileBuffered = new BufferedReader(new InputStreamReader(file))) {
-      fileBuffered.lines().forEach(line -> {
-        var orderDto = formatterLine(line);
-        var order = OrderMapper.dtoToDomain(orderDto);
-        orderImp.updateOrSaveOrder(order);
-      });
+      var orderMap = processOrders(fileBuffered);
+      orderImp.updateOrSaveOrderList(orderMap);
     } catch (IOException e) {
       log.error("[execute] Error reading file", e);
     }
@@ -104,5 +103,20 @@ public class OrderUseCase implements OrderPort {
             rule.getInitialDataPosition(),
             rule.getInitialDataPosition() + rule.getSize()),
         REMOVE_ZERO).trim();
+  }
+
+  private Map<Long, Order> processOrders(BufferedReader fileBuffered) {
+    var orderMap = new HashMap<Long, Order>();
+    fileBuffered.lines().forEach(line -> {
+      var orderDto = formatterLine(line);
+      var order = OrderMapper.dtoToDomain(orderDto);
+      if (orderMap.containsKey(order.getExternalId())) {
+        var orderMapped = orderMap.get(order.getExternalId());
+        orderMapped.addProduct(order.getOrderProducts().getFirst());
+      } else {
+        orderMap.put(order.getExternalId(), order);
+      }
+    });
+    return orderMap;
   }
 }

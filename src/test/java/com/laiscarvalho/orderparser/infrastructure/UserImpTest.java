@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import com.laiscarvalho.orderparser.domain.model.User;
+import com.laiscarvalho.orderparser.domain.model.UserTest;
 import com.laiscarvalho.orderparser.infrastructure.db.UserImp;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.UserEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.repository.UserRepository;
@@ -24,12 +25,21 @@ public class UserImpTest {
   private UserImp userImp;
 
   @Test
-  public void shoudReturnFindUser() {
+  public void shoudfindUserById() {
     when(userRepository.findByExternalId(any()))
         .thenReturn(Optional.ofNullable(buildUserEntity()));
 
     var response = userImp.findUserById(123L);
     assertThat(response).usingRecursiveComparison().isEqualTo(buildUser());
+  }
+
+  @Test
+  public void shoudReturnfindUser() {
+    when(userRepository.findByExternalId(any()))
+        .thenReturn(Optional.ofNullable(buildUserEntity()));
+
+    var response = userImp.findUser(buildUserEntity());
+    assertThat(response.get()).usingRecursiveComparison().isEqualTo(buildUserEntity());
   }
 
   @Test

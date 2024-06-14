@@ -5,6 +5,7 @@ import com.laiscarvalho.orderparser.domain.dto.OrderDto;
 import com.laiscarvalho.orderparser.domain.model.Order;
 import com.laiscarvalho.orderparser.domain.model.OrderProduct;
 import com.laiscarvalho.orderparser.domain.model.User;
+import com.laiscarvalho.orderparser.domain.model.UserTest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;

@@ -5,6 +5,7 @@ import com.laiscarvalho.orderparser.domain.model.Order;
 import com.laiscarvalho.orderparser.domain.model.OrderProduct;
 import com.laiscarvalho.orderparser.domain.model.User;
 import com.laiscarvalho.orderparser.entry.dto.OrderResponseDto;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class OrderMapper {
 
   public static Order dtoToDomain(OrderDto order) {
-    List<OrderProduct> products = List.of(OrderProduct.builder()
+    var productList = new ArrayList<OrderProduct>();
+    productList.add(OrderProduct.builder()
         .value(order.productValue())
         .id(order.productId())
         .build());
@@ -23,8 +25,8 @@ public class OrderMapper {
     return Order.builder()
         .date(order.orderDate())
         .externalId(order.orderId())
-        .orderProducts(products)
-        .totalValue(products.getFirst().getValue())
+        .orderProducts(productList)
+        .totalValue(productList.getFirst().getValue())
         .user(User.builder()
             .name(order.name())
             .externalId(order.userId())

@@ -6,6 +6,7 @@ import com.laiscarvalho.orderparser.domain.model.User;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.OrderEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.ProductEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.UserEntity;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +18,7 @@ public class OrderEntityMapper {
             .id(productEntity.getExternalId())
             .value(productEntity.getValue())
             .build())
-        .toList();
+        .collect(Collectors.toList());
 
     var user = User.builder()
         .name(orderEntity.getUser().getName())
@@ -53,7 +54,6 @@ public class OrderEntityMapper {
         .map(product -> ProductEntity.builder()
             .externalId(product.getId())
             .value(product.getValue())
-            .orderEntity(orderEntity)
             .build())
         .toList();
 

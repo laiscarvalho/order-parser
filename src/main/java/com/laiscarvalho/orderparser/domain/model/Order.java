@@ -15,4 +15,14 @@ public class Order {
   BigDecimal totalValue;
   Long externalId;
   User user;
+
+  public Order addProduct(OrderProduct product) {
+    orderProducts.add(product);
+    totalValue = totalValue.add(product.getValue());
+    return this;
+  }
+
+  public static BigDecimal addTotalValue(BigDecimal totalValue, BigDecimal value) {
+    return totalValue.add(value);
+  }
 }

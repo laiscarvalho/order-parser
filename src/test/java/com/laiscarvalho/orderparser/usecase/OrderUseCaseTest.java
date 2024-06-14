@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import com.laiscarvalho.orderparser.domain.model.Order;
 import com.laiscarvalho.orderparser.domain.model.OrderProduct;
 import com.laiscarvalho.orderparser.domain.model.User;
+import com.laiscarvalho.orderparser.domain.model.UserTest;
 import com.laiscarvalho.orderparser.entry.dto.OrderResponseDto;
 import com.laiscarvalho.orderparser.exception.ProcessingException;
 import com.laiscarvalho.orderparser.infrastructure.db.OrderImp;
@@ -46,11 +47,11 @@ public class OrderUseCaseTest {
     File file = new File(fileName);
     InputStream stream = new FileInputStream(file);
 
-    when(orderImp.updateOrSaveOrder(any())).thenReturn(any());
+    when(orderImp.updateOrSaveOrderList(any())).thenReturn(List.of(buildOrder()));
 
     orderUseCase.executeImporter(stream);
 
-    verify(orderImp, times(3)).updateOrSaveOrder(any(Order.class));
+    verify(orderImp, times(1)).updateOrSaveOrderList(any()) ;
   }
 
 

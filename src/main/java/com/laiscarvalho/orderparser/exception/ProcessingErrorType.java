@@ -4,7 +4,7 @@ import static com.laiscarvalho.orderparser.exception.ErrorTypeEnum.INVALID_FILE;
 import static com.laiscarvalho.orderparser.exception.ErrorTypeEnum.INVALID_LINE;
 import static com.laiscarvalho.orderparser.exception.ErrorTypeEnum.ORDER_NOT_FOUND;
 import static com.laiscarvalho.orderparser.exception.ErrorTypeEnum.USER_NOT_FOUND;
-import lombok.With;
+ import lombok.With;
 
 
 public record ProcessingErrorType(int code, @With String message, ErrorTypeEnum processingErrorType) {
@@ -16,5 +16,4 @@ public record ProcessingErrorType(int code, @With String message, ErrorTypeEnum 
       new ProcessingErrorType(003, "invalid input file", INVALID_FILE);
   public static final ProcessingErrorType USER_ORDER_NOT_FOUND =
       new ProcessingErrorType(004, "user not found", USER_NOT_FOUND);
-
 }

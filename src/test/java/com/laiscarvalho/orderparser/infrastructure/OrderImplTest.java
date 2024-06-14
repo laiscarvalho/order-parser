@@ -8,14 +8,17 @@ import com.laiscarvalho.orderparser.domain.model.Order;
 import com.laiscarvalho.orderparser.domain.model.OrderProduct;
 import com.laiscarvalho.orderparser.domain.model.User;
 import com.laiscarvalho.orderparser.infrastructure.db.OrderImp;
+import com.laiscarvalho.orderparser.infrastructure.db.UserImp;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.OrderEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.ProductEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.entity.UserEntity;
 import com.laiscarvalho.orderparser.infrastructure.db.repository.OrderRepository;
-import com.laiscarvalho.orderparser.infrastructure.db.repository.UserRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +32,7 @@ public class OrderImplTest {
   private OrderRepository orderRepository;
 
   @Mock
-  private UserRepository userRepository;
+  private UserImp userImp;
 
   @InjectMocks
   private OrderImp orderImp;
@@ -41,10 +44,11 @@ public class OrderImplTest {
   public void shouldUpdateOrSaveOrderFindExistingOrder() {
     when(orderRepository.findByExternalId(any()))
         .thenReturn(Optional.ofNullable(buildOrderEntity()));
-
     when(orderRepository.save(any())).thenReturn(buildOrderEntity());
-    var response = orderImp.updateOrSaveOrder(buildOrder());
-    assertThat(response).usingRecursiveComparison()
+
+    var response = orderImp.updateOrSaveOrderList(buildOrderMap());
+
+    assertThat(response.getFirst()).usingRecursiveComparison()
         .isEqualTo(buildOrder());
   }
 
@@ -52,10 +56,12 @@ public class OrderImplTest {
   public void shouldUpdateOrSaveOrderNewOrder() {
     when(orderRepository.findByExternalId(any()))
         .thenReturn(Optional.empty());
+    when(userImp.findUser(any()))
+        .thenReturn(Optional.ofNullable(null));
 
     when(orderRepository.save(any())).thenReturn(buildOrderEntity());
-    var response = orderImp.updateOrSaveOrder(buildOrder());
-    assertThat(response).usingRecursiveComparison()
+    var response = orderImp.updateOrSaveOrderList(buildOrderMap());
+    assertThat(response.getFirst()).usingRecursiveComparison()
         .isEqualTo(buildOrder());
   }
 
@@ -94,28 +100,30 @@ public class OrderImplTest {
   }
 
   public OrderEntity buildOrderEntity() {
+
+    var products = new ArrayList<ProductEntity>();
+    products.add(ProductEntity.builder()
+        .value(BigDecimal.valueOf(10))
+        .id(1L)
+        .externalId(1L)
+        .build());
+
     return OrderEntity.builder()
         .totalValue(BigDecimal.valueOf(10))
         .orderDate(LOCAL_DATE)
         .user(buildUserEntity())
-        .productEntities(List.of(buildProductEntity()))
+        .productEntities(products)
         .id(1L)
         .externalId(1L)
         .build();
   }
 
-  public ProductEntity buildProductEntity() {
-    return ProductEntity.builder()
-        .id(123L)
-        .value(BigDecimal.valueOf(10))
-        .externalId(123L)
-        .build();
-  }
 
   public Order buildOrder() {
-    List<OrderProduct> products = List.of(OrderProduct.builder()
+    var products = new ArrayList<OrderProduct>();
+    products.add(OrderProduct.builder()
         .value(BigDecimal.valueOf(10))
-        .id(123L)
+        .id(1L)
         .build());
 
     return Order.builder()
@@ -142,5 +150,11 @@ public class OrderImplTest {
         .externalId(1L)
         .id(1L)
         .build();
+  }
+
+  private Map<Long, Order> buildOrderMap() {
+    Map<Long, Order> orderMap = new HashMap<>();
+    orderMap.put(1L, buildOrder());
+    return orderMap;
   }
 }

@@ -39,6 +39,7 @@ public class OrderEntity {
 
   public BigDecimal totalValue;
 
-  @OneToMany(mappedBy = "orderEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "orderId")
   private List<ProductEntity> productEntities;
 }
